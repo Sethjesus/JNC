@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>空氣品質看板</title>
+</head>
+<body>
+  <h2>PM2.5：<span id="pm25">--</span> μg/m³</h2>
+  <h2>CO2：<span id="co2">--</span> ppm</h2>
+
+  <script>
+    async function loadData() {
+      const res = await fetch("data.json");
+      const data = await res.json();
+      document.getElementById("pm25").innerText = data.pm25;
+      document.getElementById("co2").innerText = data.co2;
+    }
+    setInterval(loadData, 3000); // 每3秒更新一次
+    loadData();
+  </script>
+</body>
+</html>
