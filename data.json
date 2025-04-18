@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 
 def push_to_git():
+    os.system("git pull origin main --rebase")  # 🟢 這行是關鍵
     os.system("git add data.json")
     os.system(f'git commit -m "自動更新 {datetime.now()}"')
     os.system("git push origin main")
