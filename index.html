@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,39 +59,22 @@
       <div class="value" id="co2">--</div>
     </div>
   </div>
-  <div class="footer">每天自動更新（從 CSV 擷取最新一筆）</div>
+  <div class="footer">每 10 秒自動更新</div>
 
   <script>
-    function getTodayCSVName() {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, "0");
-      const dd = String(now.getDate()).padStart(2, "0");
-      return `data_${yyyy}-${mm}-${dd}.csv`;
-    }
-
-    async function updateAirData() {
-      const csvUrl = getTodayCSVName();
+    async function fetchData() {
       try {
-        const res = await fetch(csvUrl);
-        const text = await res.text();
-        const lines = text.trim().split("\n");
-        if (lines.length < 2) return;
-
-        const lastLine = lines[lines.length - 1];
-        const parts = lastLine.split(",");
-        const pm25 = parts[1];
-        const co2 = parts[2];
-
-        document.getElementById("pm25").innerText = pm25;
-        document.getElementById("co2").innerText = co2;
-      } catch (err) {
-        console.error("❌ 無法載入 CSV 檔案：", err);
+        const res = await fetch("data.json"); // ✅ 改為相對路徑
+        const data = await res.json();
+        document.getElementById("pm25").textContent = data.pm25.toFixed(2);
+        document.getElementById("co2").textContent = data.co2.toFixed(1);
+      } catch (e) {
+        console.error("❌ 無法載入資料：", e);
       }
     }
 
-    updateAirData();
-    setInterval(updateAirData, 30000);
+    fetchData();                 // 第一次載入
+    setInterval(fetchData, 10000); // 每 10 秒更新
   </script>
 </body>
 </html>
