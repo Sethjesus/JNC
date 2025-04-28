@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>空氣品質即時儀表板</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+    .container {
+      display: flex;
+      gap: 2rem;
+    }
+    .box {
+      background-color: #222;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+      width: 150px;
+    }
+    .label {
+      font-size: 1rem;
+      color: #aaa;
+    }
+    .value {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    .timestamp {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌿 空氣品質即時儀表板</h1>
+  <div class="container">
+    <div class="box">
+      <div class="label">PM2.5 (μg/m³)</div>
+      <div class="value" id="pm25">--</div>
+    </div>
+    <div class="box">
+      <div class="label">CO₂ (ppm)</div>
+      <div class="value" id="co2">--</div>
+    </div>
+  </div>
+  <div class="timestamp" id="timestamp">更新時間：--</div>
+  <div class="footer">每 10 秒自動更新</div>
+
+  <script>
+    async function fetchData() {
+      try {
+        const res = await fetch("https://raw.githubusercontent.com/Sethjesus/JNC/main/data.json", {
+          cache: "no-store"
+        });
+        const data = await res.json();
+        document.getElementById("pm25").textContent = data.pm25.toFixed(2);
+        document.getElementById("co2").textContent = data.co2.toFixed(1);
+        document.getElementById("timestamp").textContent = "更新時間：" + data.timestamp;
+      } catch (e) {
+        console.error("❌ 無法載入資料：", e);
+      }
+    }
+
+    fetchData(); // 首次載入
+    setInterval(fetchData, 10000); // 每 10 秒更新
+  </script>
+</body>
+</html>
