@@ -11,9 +11,9 @@ target_json = os.path.join(project_path, 'docs', 'data.json')
 # 步驟 1：複製 data.json 到 docs 資料夾
 try:
     shutil.copy2(source_json, target_json)
-    print(f"[{datetime.now()}] ✅ 已同步 data.json 到 docs 資料夾")
+    print(f"[{datetime.now()}] ✅ 已同步 data.json 到 docs 資料夾", flush=True)
 except Exception as e:
-    print(f"[{datetime.now()}] ❌ 同步失敗：{e}")
+    print(f"[{datetime.now()}] ❌ 同步失敗：{e}", flush=True)
     exit(1)
 
 # 步驟 2：切換到專案目錄
@@ -28,9 +28,8 @@ try:
         commit_message = f'自動推送更新 data.json {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
         os.system(f'git commit -m "{commit_message}"')
         os.system('git push origin main')
-        print(f"[{datetime.now()}] ✅ 成功推送到 GitHub")
+        print(f"[{datetime.now()}] ✅ 成功推送到 GitHub", flush=True)
     else:
-        print(f"[{datetime.now()}] 💤 沒有變更，不需要推送")
+        print(f"[{datetime.now()}] 💤 沒有變更，不需要推送", flush=True)
 except Exception as e:
-    print(f"[{datetime.now()}] ❌ Git 推送失敗：{e}")
-R
+    print(f"[{datetime.now()}] ❌ Git 推送失敗：{e}", flush=True)
